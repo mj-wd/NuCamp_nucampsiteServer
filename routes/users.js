@@ -7,7 +7,11 @@ const cors = require('./cors');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+// router.get('/', function(req, res, next) {
+//     res.send('respond with a resource');
+//   });
+  
+router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     User.find()
     .then(users => {
         res.statusCode = 200;
