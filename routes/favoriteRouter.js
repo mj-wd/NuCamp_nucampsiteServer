@@ -6,7 +6,7 @@ const cors = require('./cors');
 const favoriteRouter = express.Router();
 
 favoriteRouter.route('/')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.options(cors.corsWithOptions, (res) => res.sendStatus(200))
 .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
     Favorite.find({ user: req.user._id })
     .populate('user')
@@ -40,7 +40,7 @@ favoriteRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, (next) => {
     const error = new Error ('Operation not supported.');
     error.staus = 403;
     next(error);
@@ -60,8 +60,8 @@ favoriteRouter.route('/')
 });
 
 favoriteRouter.route('/:campsiteId')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, authenticate.verifyUser, (req, res, next) => {
+.options(cors.corsWithOptions, (res) => res.sendStatus(200))
+.get(cors.cors, authenticate.verifyUser, (next) => {
     const error = new Error ('Operation not supported.');
     error.staus = 403;
     next(error);
@@ -86,12 +86,12 @@ favoriteRouter.route('/:campsiteId')
     })
     .catch(err => next(err));
 })   
-.put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, (next) => {
     const error = new Error ('Operation not supported.')
     error.staus = 403;
     next(error);
 })
-.delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
     Favorite.findOne({user: req.user._id})
     .then(favorite => {
         if (favorite) {
